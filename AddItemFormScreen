@@ -1,0 +1,48 @@
+import React from 'react';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+
+export default function AddItemFormScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Add New Menu Item</Text>  
+      <TextInput placeholder="Item Name" 
+      style={styles.input}  
+      //Adds item name 
+      />
+      <TextInput placeholder="Price" 
+      style={styles.input} keyboardType="numeric" 
+      //Adds item price
+      /> 
+      <TextInput placeholder="Description" 
+      style={styles.input} multiline 
+      //Adds description of an item
+      /> 
+      <Button
+        title="Submit"
+        onPress={() => Alert.alert('Submitted!')} 
+        // On press of button submit, an alert will be called
+      />
+    </View>
+  );
+}
+
+//styles for the component
+const styles = StyleSheet.create({ 
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+});

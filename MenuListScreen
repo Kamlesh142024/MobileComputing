@@ -1,0 +1,235 @@
+import React, { useState } from 'react';
+import { View, Text, Alert, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+
+// Sample menu items with details including vegetarian status
+const sampleMenuItems = [
+  { id: '1', name: 'Spaghetti Bolognese', price: '$12.99', vegetarian: false },
+  { id: '2', name: 'Margherita Pizza', price: '$10.99', vegetarian: false },
+  { id: '3', name: 'Caesar Salad', price: '$8.99', vegetarian: false },
+  { id: '4', name: 'Pasta Aglio e Olio', price: '$10.99', vegetarian: false },
+  { id: '5', name: 'Pepperoni Pizza', price: '$12.99', vegetarian: false },
+  { id: '6', name: 'Chicken Parmesan', price: '$16.99', vegetarian: false },
+  { id: '7', name: 'Chocolate Lava Cake', price: '$6.99', vegetarian: false },
+  { id: '8', name: 'Ice Cream Sundae', price: '$7.99', vegetarian: false },
+  { id: '9', name: 'Tiramisu', price: '$8.99', vegetarian: true },
+  { id: '10', name: 'Cappuccino', price: '$3.99', vegetarian: false },
+  { id: '11', name: 'Lasagna', price: '$14.99', vegetarian: false },
+  { id: '12', name: 'Chicken Alfredo', price: '$13.49', vegetarian: false },
+  { id: '13', name: 'Beef Wellington', price: '$22.99', vegetarian: false },
+  { id: '14', name: 'Shrimp Scampi', price: '$18.99', vegetarian: false },
+  { id: '15', name: 'Vegetarian Burrito', price: '$12.99', vegetarian: true },
+  { id: '16', name: 'Steak Frites', price: '$24.99', vegetarian: false },
+  { id: '17', name: 'Buffalo Wings', price: '$9.99', vegetarian: false },
+  { id: '18', name: 'Mushroom Risotto', price: '$12.49', vegetarian: true },
+  { id: '19', name: 'BBQ Ribs', price: '$19.99', vegetarian: false },
+  { id: '20', name: 'Aloo Cutlet', price: '$9.99', vegetarian: true },
+  { id: '21', name: 'Sabzi Curry', price: '$11.99', vegetarian: true },
+  { id: '22', name: 'Indian Thali', price: '$14.99', vegetarian: true },
+  { id: '23', name: 'Lamb Chops with Red Sauce', price: '$25.99', vegetarian: false },
+  { id: '24', name: 'Spinach and Feta Quiche', price: '$12.99', vegetarian: true },
+  { id: '25', name: 'Daal Chawal with Raita', price: '$12.49', vegetarian: true },
+  { id: '26', name: 'Hot & Sour Soup', price: '$5.50', vegetarian: false },
+  { id: '27', name: 'Vegetable Curry', price: '$3.80', vegetarian: true },
+]
+
+// Main functional component for the Menu List screen
+export default function MenuListScreen() {
+  // State to track items in the cart
+  const [cart, setCart] = useState([]);
+  // State to track favorite items by their IDs
+  const [favorites, setFavorites] = useState([]);
+  // State to toggle between all items and vegetarian-only items
+  const [showVegetarian, setShowVegetarian] = useState(false);
+
+  // Toggles the showVegetarian state
+  const toggleVegetarian = () => {
+    setShowVegetarian((prev) => !prev);
+  };
+
+  // Filters menu items based on the vegetarian state
+  const filteredMenuItems = showVegetarian
+    ? sampleMenuItems.filter((item) => item.vegetarian)
+    : sampleMenuItems;
+
+  // Adds an item to the cart or updates its quantity if already in the cart
+  const addToCart = (item) => {
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    if (existingItem) {
+      setCart((prevCart) =>
+        prevCart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+      );
+      Alert.alert('Updated Cart', `${item.name} quantity increased!`);
+    } else {
+      setCart([...cart, { ...item, quantity: 1 }]);
+      Alert.alert('Added to Cart', `${item.name} has been added to your cart!`);
+    }
+  };
+
+  // Adds an item to the favorites list if not already present
+  const addToFavorites = (item) => {
+    if (favorites.includes(item.id)) {
+      Alert.alert('Info', `${item.name} is already in your favorites.`);
+      return;
+    }
+    setFavorites([...favorites, item.id]);
+    Alert.alert('Success', `${item.name} has been added to your favorites!`);
+  };
+
+  // Renders a single menu item with Add to Cart and Favorite buttons
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>
+        {item.name} - {item.price}
+      </Text>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={() => addToCart(item)}
+        >
+          <Text style={styles.buttonText}>Add to Cart</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={() => addToFavorites(item)}
+        >
+          <Text style={styles.buttonText}>Favorite</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Title of the screen */}
+      <Text style={styles.title}>Menu List</Text>
+      {/* Toggle button to switch between vegetarian and all items */}
+      <TouchableOpacity style={styles.toggleButton} onPress={toggleVegetarian}>
+        <Text style={styles.toggleButtonText}>
+          {showVegetarian ? 'Show All' : 'Show Vegetarian Only'}
+        </Text>
+      </TouchableOpacity>
+      {/* List of menu items */}
+      <FlatList
+        data={filteredMenuItems}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+      />
+      {/* Section for cart items */}
+      <Text style={styles.sectionTitle}>Cart Items</Text>
+      {cart.length > 0 ? (
+        <FlatList
+          data={cart}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Text style={styles.selectedText}>
+              {item.name} - {item.price} (x{item.quantity})
+            </Text>
+          )}
+        />
+      ) : (
+        <Text style={styles.emptyText}>No items in the cart.</Text>
+      )}
+      {/* Section for favorite items */}
+      <Text style={styles.sectionTitle}>Favorite Items</Text>
+      {favorites.length > 0 ? (
+        <FlatList
+          data={sampleMenuItems.filter((item) => favorites.includes(item.id))}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Text style={styles.selectedText}>
+              {item.name} - {item.price}
+            </Text>
+          )}
+        />
+      ) : (
+        <Text style={styles.emptyText}>No favorite items selected.</Text>
+      )}
+    </View>
+  );
+}
+
+// Styles for the component
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#F5F5F5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+  toggleButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  toggleButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  item: {
+    padding: 15,
+    marginVertical: 8,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  itemText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  addToCartButton: {
+    backgroundColor: '#28A745',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+  },
+  favoriteButton: {
+    backgroundColor: '#FF6347',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  selectedText: {
+    fontSize: 16,
+    color: '#333',
+    marginVertical: 4,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#777',
+    fontStyle: 'italic',
+  },
+});

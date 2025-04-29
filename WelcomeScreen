@@ -1,0 +1,67 @@
+import React from 'react';
+import { View, Text, Button, StyleSheet, Image } from 'react-native';
+
+export default function WelcomeScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Host's Haven</Text> 
+      <Image style={styles.pic} 
+      source={require('../screens/logo.jpg')}
+      /> 
+      <Text style={styles.slogan}>Your Home for Great Taste!</Text> 
+      <View style={styles.buttonContainer}>
+        <Button 
+          onPress={() => navigation.navigate('MenuList')} 
+          title="Go to Menu List" 
+          onPress={() => navigation.navigate('MenuList')}  //Navigates to menuList screen
+        />
+        <View style={styles.spacingButton} />
+        <Button 
+          title="Add New Item" 
+          onPress={() => navigation.navigate('AddItemForm')} //Navigates to add new item screen
+        />
+        <View style={styles.spacingButton} />
+        <Button 
+          title="Info" 
+          onPress={() => navigation.navigate('Info')} //Navigates to info screen
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#F5F5F5', // Light background color
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333', // Dark text color
+    marginBottom: 10,
+    padding: 5,
+    textAlign: 'center', 
+  },
+  slogan: { //defining styles for slogan
+    fontSize: 18,
+    fontStyle: 'italic',
+    color: '#666', // S
+    textAlign: 'center',
+    marginBottom: 20, 
+  },
+  buttonContainer: { //Defining button container width
+    width: '80%', 
+  },
+  spacingButton: {
+    height: 10, // Space between buttons
+  },
+  pic : {
+    width: '65%',
+    height: 220,
+    marginBottom: 20, //defining width, height and marginBottom for pic
+  }
+});

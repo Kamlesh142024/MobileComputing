@@ -1,0 +1,51 @@
+import React from 'react';
+import { View, Text, StyleSheet, Button, Alert, Image } from 'react-native';
+
+export default function InfoScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>About</Text> 
+      <Text style={styles.content}>
+        Host's Haven: Where delicious meals find your doorstep!
+      </Text> 
+        <Image style={styles.pic} source={require('../screens/restaurant.jpg')} /> 
+      <Button
+        title="Details"
+        onPress={() =>
+          Alert.alert(
+            "Welcome to Host's Haven!",
+            "Experience a world of flavors from the comfort of your home. Order now and let us deliver delicious meals to your doorstep!"
+          )
+        }
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10, 
+    textAlign: 'center', 
+  },
+  content: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  pic: {
+    width: '80%',
+    height: 220,
+    marginBottom: 20, 
+  },
+  button: {
+    marginTop: 20, 
+  },
+});
