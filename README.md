@@ -1,2 +1,2 @@
 # MobileComputing
-My first mobile app developed on React
+My first mobile computing project on React Native.
