@@ -1,2 +1,1 @@
-# MobileComputing
-My first mobile computing project on React Native.
+This Mobile Computing project features "Host's Haven," a restaurant application with four key screens. The WelcomeScreen greets users with the app's name, logo, and slogan, providing entry points to the MenuListScreen, where users can browse items, add them to a cart, favorite them, and filter vegetarian options. The InfoScreen offers details about the application and its purpose. Finally, the AddItemFormScreen allows for the input of new menu items, enabling menu updates.
